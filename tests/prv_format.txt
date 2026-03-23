@@ -1,0 +1,79 @@
+The following text provides the complete specification for the Paraver trace file format as detailed in the document.
+Paraver Trace File Format Specification
+
+1. 
+Overview of File Components 
+
+A Paraver trace is typically composed of three separate files:
+
+    ASCII Trace File (.prv): The primary file defining object structures and containing all trace records (states, events, and communications). 
+
+    Paraver Configuration File (.pcf): Defines labels and colors for states and events. It is loaded automatically if it shares the same name as the .prv file. 
+
+    Names Configuration File (.row): Defines custom row labels to replace default identifiers (e.g., "NAS LU MASTER" instead of "THREAD 1.1.1"). 
+
+2. 
+ASCII Trace Format Structure 
+
+The ASCII trace file consists of a header and a body. 
+
+A. Trace Header Format 
+The header is a single line with fields separated by colons. It must begin with the # symbol. 
+
+#Paraver (dd/mm/yy at hh:mm):ftime:nNodes(nCpus1,nCpus2,...):nAppl:applicationList 
+
+    #Paraver (dd/mm/yy at hh:mm): Date and time of trace generation. 
+
+    ftime: Total trace duration in microseconds. 
+
+    nNodes(nCpus1, nCpus2, ...): Resource model definition. 
+
+        nNodes: Total number of nodes. 
+
+        nCpusX: Number of processors on the specified node. 
+
+        Note: Use 0 for resource information to disable resource levels if the data is unavailable. 
+
+    nAppl: Total number of applications in the trace. 
+
+    applicationList: Defines the structure of each application. 
+
+        Format: nTasks(nThreads1:node, nThreads2:node, ...) 
+
+        nTasks: Number of tasks (processes) in the application. 
+
+        nThreadsX:node: Number of threads in the task and the specific node where they execute. 
+
+B. Trace Body and Record Types The body contains chronological records associated with specific threads. 
+
+    State Records: Represent intervals of thread status or resource consumption (e.g., running, idle). 
+
+    Event Records: Punctual events in the code, such as routine entry/exit or variable changes. These include a Type and a Value. 
+
+    Communication Records: Represent interactions between a sender and receiver. 
+
+        Logical: Software-level primitives (send/receive). 
+
+        Physical: Actual message transfer on the network. 
+
+3. 
+Examples 
+
+Example 1: Basic Header Format #Paraver (22/05/01 at 16:20):1021312:2(16,16):1:2(1:1,1:2) 
+
+    This header describes a trace with 2 nodes (each with 16 CPUs), 1 application, and 2 tasks (each with 1 thread, mapped to nodes 1 and 2 respectively). 
+
+Example 2: Mixed Programming Model Header 
+Consider a system with two applications executed on two SMP nodes (4 processors each). Application 1 is a mixed OpenMP+MPI model (2 tasks, 4 threads each). Application 2 is an OpenMP model (1 task, 4 threads). 
+
+#Paraver (10/04/01 at 18:30):20125743:2(4,4):2:2(4:2,4:1):1(4:2) 
+
+    Resource Model: 2(4,4) (2 nodes, 4 processors each). 
+
+    Process Model: 
+
+        2: (2 total applications). 
+
+        2(4:2, 4:1): (App 1 has 2 tasks; Task 1 has 4 threads on Node 2, Task 2 has 4 threads on Node 1). 
+
+        1(4:2) (App 2 has 1 task with 4 threads on Node 2).

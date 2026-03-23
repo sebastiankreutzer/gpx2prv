@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="gpx2prv_test">
+  <metadata>
+    <name>Minimal Track</name>
+    <desc>A simple track for testing</desc>
+  </metadata>
+  <trk>
+    <name>Test Track</name>
+    <trkseg>
+      <trkpt lat="40.0" lon="-74.0">
+        <ele>100</ele>
+        <time>2024-01-01T10:00:00Z</time>
+      </trkpt>
+      <trkpt lat="40.1" lon="-73.9">
+        <ele>150</ele>
+        <time>2024-01-01T10:05:00Z</time>
+      </trkpt>
+      <trkpt lat="40.2" lon="-73.8">
+        <ele>200</ele>
+        <time>2024-01-01T10:10:00Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
