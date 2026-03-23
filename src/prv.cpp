@@ -239,7 +239,6 @@ void convert(const gpx::GpxDocument& gpx, const std::string& output_prefix,
     }
 
     std::unordered_map<int, int> bucket_offsets;
-    uint64_t max_next_timestamp = 0;
     for (size_t i = 0; i < all_gpx_points.size(); ++i) {
       const auto& gpx_pt = all_gpx_points[i];
 
@@ -249,23 +248,24 @@ void convert(const gpx::GpxDocument& gpx, const std::string& output_prefix,
       int offset = bucket_offsets[lon_bucket]++;
       int bucket_width = total_time_us / num_lon_buckets;
       uint64_t timestamp = static_cast<uint64_t>(lon_bucket) * bucket_width + offset;
-      uint64_t next_timestamp = timestamp + 1000;
-
-      if (next_timestamp > max_next_timestamp) max_next_timestamp = next_timestamp;
 
       int thread = num_threads - 1 - latitude_to_thread(gpx_pt.latitude, lat_min, lat_max, num_threads);
 
       TracePoint tp;
       tp.thread = thread;
       tp.timestamp = timestamp;
-      tp.next_timestamp = next_timestamp;
       tp.latitude = gpx_pt.latitude;
       tp.longitude = gpx_pt.longitude;
       tp.elevation = gpx_pt.elevation;
       all_points.push_back(tp);
     }
 
-    uint64_t final_time = max_next_timestamp + 1000;
+    for (size_t i = 0; i + 1 < all_points.size(); ++i) {
+      all_points[i].next_timestamp = all_points[i + 1].timestamp;
+    }
+    all_points.back().next_timestamp = all_points.back().timestamp + 1000;
+
+    uint64_t final_time = all_points.back().next_timestamp + 1000;
 
     write_trace_files(output_prefix, all_points,
                       lat_min, lat_max, lon_min, lon_max,
