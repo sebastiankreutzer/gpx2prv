@@ -38,7 +38,7 @@ Tests are built automatically. Run them with:
 ### Basic Usage
 
 ```bash
-./gpx2prv_app <gpx_file> [output_prefix]
+./gpx2prv <gpx_file> [output_prefix]
 ```
 
 ### Options
@@ -56,7 +56,7 @@ The default mode visualizes elevation by latitude:
 - **Color**: Elevation (green = low, red = high)
 
 ```bash
-./gpx2prv_app route.gpx my_route
+./gpx2prv route.gpx my_route
 wxparaver my_route.prv my_route.cfg
 ```
 
@@ -68,7 +68,7 @@ The map view provides a spatial visualization:
 - **Color**: Elevation (green = low, red = high)
 
 ```bash
-./gpx2prv_app route.gpx my_route --map
+./gpx2prv route.gpx my_route --map
 wxparaver my_route_map.prv my_route_map.cfg
 ```
 
@@ -77,7 +77,7 @@ wxparaver my_route_map.prv my_route_map.cfg
 Using the example GPX file:
 
 ```bash
-./gpx2prv_app examples/example.gpx example --map
+./gpx2prv examples/example.gpx example --map
 wxparaver example_map.prv example_map.cfg
 ```
 

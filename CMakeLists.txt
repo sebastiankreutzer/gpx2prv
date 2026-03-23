@@ -15,17 +15,17 @@ FetchContent_MakeAvailable(pugixml)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_library(gpx2prv STATIC src/gpx.cpp src/prv.cpp)
-target_include_directories(gpx2prv PUBLIC
+add_library(gpx2prv_lib STATIC src/gpx.cpp src/prv.cpp)
+target_include_directories(gpx2prv_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_link_libraries(gpx2prv PUBLIC pugixml::pugixml)
+target_link_libraries(gpx2prv_lib PUBLIC pugixml::pugixml)
 
-add_executable(gpx2prv_app src/main.cpp)
-target_link_libraries(gpx2prv_app PRIVATE gpx2prv)
+add_executable(gpx2prv src/main.cpp)
+target_link_libraries(gpx2prv PRIVATE gpx2prv_lib)
 
 enable_testing()
 add_subdirectory(tests)
 
-install(TARGETS gpx2prv_app gpx2prv DESTINATION lib)
+install(TARGETS gpx2prv gpx2prv_lib DESTINATION lib)
 install(DIRECTORY include/gpx2prv DESTINATION include)
